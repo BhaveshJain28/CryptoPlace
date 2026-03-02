@@ -32,6 +32,11 @@ function Home() {
           displayCoins.slice(0,10).map((item,index)=>(
             <div className="table-layout" key={index}>
               <p>{item.market_cap_rank}</p>
+              <div>
+                <img src={item.image} alt="" />
+                <p>{item.name +" - " +item.symbol}</p>
+              </div>
+              <p>{currency.symbol}{item.current_price}</p>
 
             </div>
           ))
