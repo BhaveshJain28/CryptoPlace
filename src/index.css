@@ -1,18 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sriracha&display=swap');
 
-*{
-    padding:0;
+* {
+    padding: 0;
     margin: 0;
     box-sizing: border-box;
-     font-family: "Outfit", sans-serif;
+    font-family: "Outfit", sans-serif;
 }
-a{
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+::selection {
+    background: rgba(121, 39, 255, 0.4);
+    color: #fff;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0b004e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(121, 39, 255, 0.4);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(121, 39, 255, 0.6);
+}
+
+a {
     text-decoration: none;
     color: inherit;
-
 }
-.app{
+
+.app {
     min-height: 100vh;
-    color: #ffff;
-    background: linear-gradient(#0b004e, #1d152f, #002834);
+    color: #fff;
+    background: linear-gradient(135deg, #0b004e 0%, #1d152f 50%, #002834 100%);
+    display: flex;
+    flex-direction: column;
 }
