@@ -8,11 +8,10 @@
 .spin {
     width: 56px;
     height: 56px;
-    border: 4px solid rgba(255, 255, 255, 0.15);
+    border: 4px solid rgba(255, 255, 255, 0.1);
     border-top: 4px solid #7927ff;
     border-radius: 50%;
-    animation: rotate 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-    box-shadow: 0 0 20px rgba(121, 39, 255, 0.25);
+    animation: rotate 0.8s linear infinite;
 }
 
 @keyframes rotate {
@@ -21,18 +20,11 @@
     }
 }
 
-/* Coin Page */
-.coin {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px 80px;
-    animation: fadeInUp 0.5s ease-out;
-}
-
-@keyframes fadeInUp {
+/* Page fade-in */
+@keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(24px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -40,116 +32,173 @@
     }
 }
 
-/* Coin Header / Name */
+/* Coin Page */
+.coin {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 30px 50px 80px;
+}
+
+/* Top Row: Image + Table side by side */
+.coin-top {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+    animation: slideUp 0.5s ease-out;
+    align-items: stretch;
+}
+
+/* Coin Image / Name Card (left) */
 .coin-name {
+    flex: 0 0 340px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    margin: 60px auto 40px;
-    padding: 40px 24px;
-    background: rgba(255, 255, 255, 0.04);
+    justify-content: center;
+    gap: 24px;
+    padding: 50px 30px;
+    background: linear-gradient(145deg, rgba(54, 3, 255, 0.12), rgba(105, 2, 153, 0.1));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    backdrop-filter: blur(12px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.coin-name:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(121, 39, 255, 0.15);
 }
 
 .coin-name img {
-    max-width: 90px;
-    filter: drop-shadow(0 4px 16px rgba(121, 39, 255, 0.3));
-    transition: transform 0.3s ease;
-}
-
-.coin-name:hover img {
-    transform: scale(1.08);
+    max-width: 150px;
+    filter: drop-shadow(0 6px 20px rgba(121, 39, 255, 0.25));
 }
 
 .coin-name p b {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 600;
-    background: linear-gradient(135deg, #ffffff, #c4b5fd);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.5px;
+    text-align: center;
+    display: block;
 }
 
-/* Chart */
-.coin-chart {
-    max-width: 100%;
-    height: 280px;
-    margin: 0 auto 20px;
-    padding: 24px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    backdrop-filter: blur(8px);
-}
-
-/* Info Section */
+/* Info Table Card (right) */
 .coin-info {
-    max-width: 100%;
-    margin: 32px auto 0;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 8px 0;
-    overflow: hidden;
-    backdrop-filter: blur(8px);
+    justify-content: center;
+    padding: 28px 40px;
+    background: linear-gradient(145deg, rgba(54, 3, 255, 0.1), rgba(105, 2, 153, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
 }
 
 .coin-info ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    margin: 0 8px;
-    border-radius: 10px;
+    gap: 40px;
+    padding: 22px 20px;
     list-style: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     transition: background 0.2s ease;
+    border-radius: 8px;
 }
 
 .coin-info ul:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.coin-info ul:last-child {
+    border-bottom: none;
 }
 
 .coin-info ul li:first-child {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 400;
-    color: #a5a3a8;
-    letter-spacing: 0.2px;
+    color: #bbb;
+    white-space: nowrap;
 }
 
 .coin-info ul li:last-child {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
     color: #f0ecf6;
-    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
+/* Chart Box — full width below */
+.coin-chart {
+    width: 650px;
+    height: 370px;
+    padding: 30px;
+    background: linear-gradient(145deg, rgba(54, 3, 255, 0.1), rgba(105, 2, 153, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    animation: slideUp 0.5s ease-out 0.15s both;
+}
+
+/* Responsive — Tablet */
+@media (max-width: 768px) {
     .coin {
-        padding: 20px 14px 60px;
+        padding: 20px 16px 60px;
+    }
+
+    .coin-top {
+        flex-direction: column;
+        gap: 20px;
     }
 
     .coin-name {
-        margin: 40px auto 28px;
-        padding: 28px 16px;
+        flex: none;
+        padding: 36px 24px;
         border-radius: 16px;
     }
 
     .coin-name p b {
-        font-size: 26px;
+        font-size: 28px;
+    }
+
+    .coin-name img {
+        max-width: 90px;
+    }
+
+    .coin-info {
+        padding: 20px 24px;
+        border-radius: 16px;
+    }
+
+    .coin-info ul {
+        padding: 18px 12px;
+    }
+
+    .coin-info ul li:first-child {
+        font-size: 16px;
+    }
+
+    .coin-info ul li:last-child {
+        font-size: 18px;
+    }
+
+    .coin-chart {
+        height: 280px;
+        padding: 20px;
+        border-radius: 16px;
+    }
+}
+
+/* Responsive — Mobile */
+@media (max-width: 500px) {
+    .coin {
+        padding: 14px 12px 50px;
+    }
+
+    .coin-top {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .coin-name {
+        padding: 28px 16px;
+        border-radius: 14px;
+    }
+
+    .coin-name p b {
+        font-size: 22px;
     }
 
     .coin-name img {
@@ -158,22 +207,27 @@
 
     .coin-chart {
         height: 220px;
-        padding: 16px;
-        border-radius: 12px;
+        padding: 14px;
+        border-radius: 14px;
     }
 
     .coin-info {
-        border-radius: 12px;
+        padding: 14px 16px;
+        border-radius: 14px;
     }
 
     .coin-info ul {
-        padding: 14px 16px;
+        padding: 16px 8px;
         flex-direction: column;
         align-items: flex-start;
-        gap: 4px;
+        gap: 6px;
+    }
+
+    .coin-info ul li:first-child {
+        font-size: 14px;
     }
 
     .coin-info ul li:last-child {
-        font-size: 15px;
+        font-size: 16px;
     }
 }
