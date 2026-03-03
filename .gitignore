@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+#backend nodemodules
+backend/node_modules
+backend/dist
+backend/dist-ssr
+backend/backend     
