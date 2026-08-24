@@ -2,6 +2,8 @@ const coingeckoApi = require('../config/coingeckoApi');
 
 const getMarkets = async (req, res) => {
     try {
+           console.log("1. Route reached");
+             console.log("2. Query:", req.query);
         const params = {
             vs_currency: req.query.vs_currency || 'usd',
             ...req.query,

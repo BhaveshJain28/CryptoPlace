@@ -9,9 +9,19 @@
 
 html {
     scroll-behavior: smooth;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 body {
+    width: 100%;
+    min-width: 320px;
+    overflow-x: hidden;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
     overflow-x: hidden;
 }
 
@@ -45,8 +55,11 @@ a {
 
 .app {
     min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
     color: #fff;
     background: linear-gradient(135deg, #0b004e 0%, #1d152f 50%, #002834 100%);
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }

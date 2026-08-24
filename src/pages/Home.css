@@ -1,6 +1,6 @@
 /* Home */
 .home {
-    padding: 0 10px;
+    padding: 0 16px;
     padding-bottom: 90px;
     flex: 1;
 }
@@ -111,6 +111,7 @@
     overflow: hidden;
     backdrop-filter: blur(8px);
     animation: tableSlideIn 0.5s ease-out 0.2s both;
+    overflow-x: auto;
 }
 
 @keyframes tableSlideIn {
@@ -141,6 +142,7 @@
     grid-template-columns: 0.4fr 2.2fr 1fr 1fr 1.5fr;
     padding: 14px 24px;
     align-items: center;
+    min-width: 720px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     transition: background 0.2s ease;
 }
@@ -164,6 +166,7 @@ a.table-layout:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .table-layout img {
@@ -193,7 +196,7 @@ a.table-layout:hover {
 }
 
 /* Tablet */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     .hero {
         margin: 50px auto 40px;
         gap: 22px;
@@ -209,9 +212,18 @@ a.table-layout:hover {
     }
 
     .table-layout {
-        grid-template-columns: 0.4fr 2.5fr 1fr 1fr;
+        grid-template-columns: 0.4fr 2.2fr 1fr;
         padding: 12px 16px;
         font-size: 14px;
+        min-width: 0;
+    }
+
+    .table-layout div p {
+        max-width: 180px;
+    }
+
+    .table-layout > p:nth-child(4) {
+        display: none;
     }
 
     .market-cap {
@@ -268,10 +280,18 @@ a.table-layout:hover {
     }
 
     .table-layout {
-        grid-template-columns: 0.4fr 2.5fr 1fr 1fr;
+        grid-template-columns: 2fr 1fr;
         padding: 10px 12px;
         font-size: 12px;
         gap: 4px;
+    }
+
+    .table-layout > p:first-child {
+        display: none;
+    }
+
+    .table-layout div p {
+        max-width: 120px;
     }
 
     .table-layout div {
@@ -285,13 +305,21 @@ a.table-layout:hover {
 }
 
 @media (max-width: 380px) {
+    .hero h1 {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        width: 100%;
+    }
+
     .table-layout {
-        grid-template-columns: 0.3fr 2fr 1fr;
+        grid-template-columns: 2fr 1fr;
         font-size: 11px;
     }
 
-    .table-layout .green,
-    .table-layout .red {
-        display: none;
+    .table-layout div p {
+        max-width: 90px;
     }
 }
