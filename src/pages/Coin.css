@@ -34,7 +34,7 @@
 
 /* Coin Page */
 .coin {
-    max-width: 1300px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 30px 50px 80px;
 }
@@ -60,6 +60,7 @@
     background: linear-gradient(145deg, rgba(54, 3, 255, 0.12), rgba(105, 2, 153, 0.1));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
+    min-width: 0;
 }
 
 .coin-name img {
@@ -84,6 +85,7 @@
     background: linear-gradient(145deg, rgba(54, 3, 255, 0.1), rgba(105, 2, 153, 0.08));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
+    min-width: 0;
 }
 
 .coin-info ul {
@@ -119,11 +121,13 @@
     color: #f0ecf6;
     text-align: right;
     white-space: nowrap;
+    overflow-wrap: anywhere;
 }
 
 /* Chart Box — full width below */
 .coin-chart {
-    width: 650px;
+    width: 100%;
+    max-width: 100%;
     height: 370px;
     padding: 30px;
     background: linear-gradient(145deg, rgba(54, 3, 255, 0.1), rgba(105, 2, 153, 0.08));
@@ -132,8 +136,14 @@
     animation: slideUp 0.5s ease-out 0.15s both;
 }
 
+@media (min-width: 1200px) {
+    .coin-chart {
+        max-width: 900px;
+    }
+}
+
 /* Responsive — Tablet */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .coin {
         padding: 20px 16px 60px;
     }
@@ -164,10 +174,12 @@
 
     .coin-info ul {
         padding: 18px 12px;
+        gap: 14px;
     }
 
     .coin-info ul li:first-child {
         font-size: 16px;
+        white-space: normal;
     }
 
     .coin-info ul li:last-child {
@@ -229,5 +241,7 @@
 
     .coin-info ul li:last-child {
         font-size: 16px;
+        text-align: left;
+        white-space: normal;
     }
 }

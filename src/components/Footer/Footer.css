@@ -13,6 +13,7 @@
     display: flex;
     justify-content: space-between;
     gap: 60px;
+    flex-wrap: wrap;
     padding: 48px 0 36px;
 }
 
@@ -38,6 +39,7 @@
 .footer-links {
     display: flex;
     gap: 80px;
+    flex-wrap: wrap;
 }
 
 .footer-col h4 {
@@ -108,7 +110,7 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     .footer {
         padding: 0 6%;
     }
@@ -129,6 +131,14 @@
 }
 
 @media (max-width: 480px) {
+    .footer {
+        padding: 0 5%;
+    }
+
+    .footer-top {
+        gap: 28px;
+    }
+
     .footer-links {
         flex-direction: column;
         gap: 28px;
@@ -138,5 +148,10 @@
         flex-direction: column;
         gap: 16px;
         text-align: center;
+    }
+
+    .footer-socials {
+        justify-content: center;
+        flex-wrap: wrap;
     }
 }

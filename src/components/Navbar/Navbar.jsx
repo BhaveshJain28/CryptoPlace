@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Navbar.css'
 import logo from '../../assets/logo.png'
 import { useContext } from 'react'
@@ -9,6 +9,17 @@ import { Link } from 'react-router-dom'
 function Navbar() {
   const {setCurrency} = useContext(CoinContext);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (window.innerWidth > 800) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', resizeHandler);
+    return () => window.removeEventListener('resize', resizeHandler);
+  }, []);
 
   const currencyHandler = (e) => {
     switch(e.target.value){
@@ -38,11 +49,13 @@ function Navbar() {
       </Link>
 
       <ul className={menuOpen ? "nav-links active" : "nav-links"}>
-        <Link to={'/'} onClick={() => setMenuOpen(false)}><li>Home</li></Link>
-        <li onClick={() => setMenuOpen(false)}>Features</li>
-        <li onClick={() => setMenuOpen(false)}>Pricing</li>
-        <li onClick={() => setMenuOpen(false)}>Blog</li>
+        <li><Link to={'/'} onClick={() => setMenuOpen(false)}>Home</Link></li>
+        <li><a href="#" onClick={() => setMenuOpen(false)}>Features</a></li>
+        <li><a href="#" onClick={() => setMenuOpen(false)}>Pricing</a></li>
+        <li><a href="#" onClick={() => setMenuOpen(false)}>Blog</a></li>
       </ul>
+
+      {menuOpen && <div className="nav-overlay" onClick={() => setMenuOpen(false)}></div>}
 
       <div className="nav-right">
         <select name="currency" onChange={currencyHandler}>
@@ -55,11 +68,11 @@ function Navbar() {
         </button>
       </div>
 
-      <div className={menuOpen ? "hamburger active" : "hamburger"} onClick={() => setMenuOpen(!menuOpen)}>
+      <button className={menuOpen ? "hamburger active" : "hamburger"} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" type="button">
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </button>
     </nav>
   )
 }
