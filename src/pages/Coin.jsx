@@ -3,6 +3,7 @@ import './Coin.css'
 import { CoinContext } from '../context/CoinContext'
 import { useParams } from 'react-router-dom'
 import LineChart from '../components/LineChart/LineChart';
+import  api from '../services/api.js';
 
 function Coin() {
   const { coinid } = useParams();
@@ -12,25 +13,23 @@ function Coin() {
 
 
 const fetchCoinData=async()=>{
-  const options = {method: 'GET', headers: {'x-cg-demo-api-key': import.meta.env.VITE_CG_API_KEY}};
-
-  try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${coinid}`, options);
-    const data = await res.json();
-    setCoinData(data);
-  } catch (err) {
-    console.error(err);
-  }
+ try{
+ const {data}=await api.get(`/coins/${coinid}`);
+ setCoinData(data);
+ }
+ catch(error){
+  console.log(error);
+  console.error(error);
+ }
 }
 
 const fetchHistoricalData=async()=>{
-  const options = {method: 'GET', headers: {'x-cg-demo-api-key': import.meta.env.VITE_CG_API_KEY}};
-
-  try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${coinid}/market_chart?vs_currency=${currency.name}&days=10&interval=daily`, options);
-    const data = await res.json();
+  try{
+    const {data}=await api.get(`/coins/${coinid}/market_chart`,{params:{vs_currency:currency.name,days:10,interval:'daily'}});
     setHistoricalData(data);
-  } catch (err) {
+  }
+  catch(err){
+    console.log(err);
     console.error(err);
   }
 }
