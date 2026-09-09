@@ -8,8 +8,8 @@ import arrow_icon from '../../assets/arrow_icon.png'
 import { Link } from 'react-router-dom'
 
 function Navbar() {
-  const {setCurrency} = useContext(CoinContext);
-  const {token, logout} = useContext(AuthContext);
+  const { setCurrency } = useContext(CoinContext);
+  const { token, logout } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -24,21 +24,21 @@ function Navbar() {
   }, []);
 
   const currencyHandler = (e) => {
-    switch(e.target.value){
-      case 'usd':{
-        setCurrency({ name:'usd', symbol:'$' });
+    switch (e.target.value) {
+      case 'usd': {
+        setCurrency({ name: 'usd', symbol: '$' });
         break;
       }
-      case 'eur':{
-        setCurrency({ name:'eur', symbol:'€' });
+      case 'eur': {
+        setCurrency({ name: 'eur', symbol: '€' });
         break;
       }
-      case 'inr':{
-        setCurrency({ name:'inr', symbol:'₹' });
+      case 'inr': {
+        setCurrency({ name: 'inr', symbol: '₹' });
         break;
       }
-      default:{
-        setCurrency({ name:'usd', symbol:'$' });
+      default: {
+        setCurrency({ name: 'usd', symbol: '$' });
         break;
       }
     }
@@ -52,10 +52,15 @@ function Navbar() {
 
       <ul className={menuOpen ? "nav-links active" : "nav-links"}>
         <li><Link to={'/'} onClick={() => setMenuOpen(false)}>Home</Link></li>
-        <li><a href="#" onClick={() => setMenuOpen(false)}>Features</a></li>
+        {/* <li><a href="#" onClick={() => setMenuOpen(false)}>Features</a></li>
         <li><a href="#" onClick={() => setMenuOpen(false)}>Pricing</a></li>
-        <li><a href="#" onClick={() => setMenuOpen(false)}>Blog</a></li>
-        {token && <li><Link to={'/watchlist'} onClick={() => setMenuOpen(false)}>Watchlist</Link></li>}
+        <li><a href="#" onClick={() => setMenuOpen(false)}>Blog</a></li> */}
+        {token && (
+          <>
+            <li><Link to={'/watchlist'} onClick={() => setMenuOpen(false)}>Watchlist</Link></li>
+            <li><Link to={'/portfolio'} onClick={() => setMenuOpen(false)}>Portfolio</Link></li>
+          </>
+        )}
       </ul>
 
       {menuOpen && <div className="nav-overlay" onClick={() => setMenuOpen(false)}></div>}
@@ -71,7 +76,7 @@ function Navbar() {
             Logout <img src={arrow_icon} alt="" />
           </button>
         ) : (
-          <Link to="/login" className="nav-btn" style={{textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'}}>
+          <Link to="/login" className="nav-btn" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
             Sign Up <img src={arrow_icon} alt="" />
           </Link>
         )}

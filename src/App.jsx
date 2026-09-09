@@ -8,6 +8,7 @@ import Footer from './components/Footer/Footer'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Watchlist from './pages/Watchlist'
+import Portfolio from './pages/Portfolio'
 import WatchlistContextProvider from './context/WatchlistContext'
 import { useContext } from 'react'
 
@@ -32,6 +33,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/coin/:coinid" element={<ProtectedRoute><Coin /></ProtectedRoute>} />
                 <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} />
+                <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
               </Routes>
