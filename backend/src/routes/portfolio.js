@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth');
-const { getPortfolio, addOrUpdateHolding, removeHolding } = require('../controller/portfolioController');
+const { getPortfolio, addOrUpdateHolding, removeHolding, resetPortfolio } = require('../controller/portfolioController');
 
 // Apply auth middleware to all routes in this router
 router.use(authMiddleware);
@@ -11,6 +11,9 @@ router.get('/', getPortfolio);
 
 // POST /api/portfolio
 router.post('/', addOrUpdateHolding);
+
+// DELETE /api/portfolio/reset
+router.delete('/reset', resetPortfolio);
 
 // DELETE /api/portfolio/:coinId
 router.delete('/:coinId', removeHolding);

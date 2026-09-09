@@ -12,9 +12,17 @@ const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         if (token) {
             localStorage.setItem('token', token);
-            // Optionally decode token or fetch user data here if needed
+            // Decode JWT payload to restore user state (email) without an extra API call
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                setUser({ email: payload.email, id: payload.userId });
+            } catch {
+                // malformed token — clear it
+                setToken(null);
+            }
         } else {
             localStorage.removeItem('token');
+            setUser(null);
         }
     }, [token]);
 

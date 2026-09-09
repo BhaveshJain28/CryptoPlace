@@ -142,8 +142,29 @@ const removeHolding = async (req, res) => {
     }
 };
 
+const resetPortfolio = async (req, res) => {
+    try {
+        const portfolio = await Portfolio.findOneAndUpdate(
+            { userId: req.user.userId },
+            { $set: { holdings: [] } },
+            { new: true }
+        );
+
+        if (!portfolio) {
+            return res.status(404).json({ message: 'Portfolio not found' });
+        }
+
+        res.status(200).json({ message: 'Portfolio reset', holdings: portfolio.holdings });
+        
+    } catch (error) {
+        console.error('Error resetting portfolio:', error);
+        res.status(500).json({ message: 'Server error resetting portfolio' });
+    }
+};
+
 module.exports = {
     getPortfolio,
     addOrUpdateHolding,
-    removeHolding
+    removeHolding,
+    resetPortfolio
 };
