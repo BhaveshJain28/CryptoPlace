@@ -1,15 +1,20 @@
 import React, { useEffect,useState,useContext } from 'react'
 import './Coin.css'
 import { CoinContext } from '../context/CoinContext'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import LineChart from '../components/LineChart/LineChart';
 import  api from '../services/api.js';
+import { AuthContext } from '../context/AuthContext';
+import { WatchlistContext } from '../context/WatchlistContext';
 
 function Coin() {
   const { coinid } = useParams();
   const [coinData, setCoinData] = useState(null);
   const [historicalData, setHistoricalData] = useState(null);
   const {currency}=useContext(CoinContext);
+  const { token } = useContext(AuthContext);
+  const { watchlist, addToWatchlist, removeFromWatchlist, isInWatchlist } = useContext(WatchlistContext);
+  const navigate = useNavigate();
 
 
 const fetchCoinData=async()=>{
@@ -49,9 +54,27 @@ if(coinData && historicalData){
   return (
     <div className='coin'>
       <div className="coin-top">
-        <div className="coin-name">
+        <div className="coin-name" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src={coinData.image?.large} alt=""/>
-          <p><b>{coinData.name} ({coinData.symbol?.toUpperCase()})</b></p>
+          <p style={{ margin: 0 }}><b>{coinData.name} ({coinData.symbol?.toUpperCase()})</b></p>
+          <button 
+            onClick={(e) => { 
+              e.preventDefault(); 
+              if (!token) {
+                navigate('/login');
+                return;
+              }
+              if (isInWatchlist(coinid)) {
+                removeFromWatchlist(coinid);
+              } else {
+                addToWatchlist(coinid);
+              }
+            }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', color: isInWatchlist(coinid) ? '#ffb300' : '#888' }}
+            title={isInWatchlist(coinid) ? "Remove from Watchlist" : "Add to Watchlist"}
+          >
+            {isInWatchlist(coinid) ? '★' : '☆'}
+          </button>
         </div>
         <div className="coin-info">
           <ul>

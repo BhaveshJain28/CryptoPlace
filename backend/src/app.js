@@ -11,6 +11,10 @@ app.get('/', (req, res) => {
 });
 
 const routes = require('./routes/routes');
+const authRoutes = require('./routes/auth');
+const watchlistRoutes = require('./routes/watchlist');
 app.use('/api', routes);
+app.use('/api/auth', authRoutes);
+app.use('/api/watchlist', watchlistRoutes);
 
 module.exports = app;

@@ -139,7 +139,7 @@
 /* Table rows */
 .table-layout {
     display: grid;
-    grid-template-columns: 0.4fr 2.2fr 1fr 1fr 1.5fr;
+    grid-template-columns: 0.4fr 2.2fr 1fr 1fr 1.5fr 0.5fr;
     padding: 14px 24px;
     align-items: center;
     min-width: 720px;
@@ -212,7 +212,7 @@ a.table-layout:hover {
     }
 
     .table-layout {
-        grid-template-columns: 0.4fr 2.2fr 1fr;
+        grid-template-columns: 0.4fr 2.2fr 1fr 0.5fr;
         padding: 12px 16px;
         font-size: 14px;
         min-width: 0;
@@ -280,7 +280,7 @@ a.table-layout:hover {
     }
 
     .table-layout {
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 2fr 1fr 0.5fr;
         padding: 10px 12px;
         font-size: 12px;
         gap: 4px;
@@ -315,7 +315,7 @@ a.table-layout:hover {
     }
 
     .table-layout {
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 2fr 1fr 0.5fr;
         font-size: 11px;
     }
 

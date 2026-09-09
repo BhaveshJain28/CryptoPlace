@@ -1,9 +1,14 @@
 import React, { useContext ,useEffect,useState} from 'react'
 import './Home.css'
 import { CoinContext } from '../context/CoinContext'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
+import { WatchlistContext } from '../context/WatchlistContext'
 function Home() {
   const {allCoins,currency} = useContext(CoinContext);
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { watchlist, addToWatchlist, removeFromWatchlist, isInWatchlist } = useContext(WatchlistContext);
   const [displayCoins,setDisplayCoin] = useState([]);
   const [input,setInput]=useState('');
   const inputHandler = (e) => {
@@ -15,6 +20,10 @@ function Home() {
 
   const searchHandler=async(e)=>{
     e.preventDefault();
+    if (!token) {
+      navigate('/login');
+      return;
+    }
    const coins= await allCoins.filter((item)=>{
       return item.name.toLowerCase().includes(input.toLowerCase())
     })
@@ -48,6 +57,7 @@ function Home() {
             <p>Price</p>
             <p style={{textAlign:'center'}}>24H Change</p>
             < p className='market-cap'>Market Cap</p>
+            <p style={{textAlign:'center'}}>Watch</p>
         </div>
        {
           displayCoins.slice(0,12).map((item,index)=>(            <Link to={`/coin/${item.id}`} className="table-layout" key={index}>
@@ -63,6 +73,27 @@ function Home() {
               <p className='market-cap' style={{textAlign:'right'}}>
                 {currency.symbol}{item.market_cap.toLocaleString()}
               </p>
+              <div style={{ textAlign: 'center' }}>
+                <button 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    e.stopPropagation(); 
+                    if (!token) {
+                      navigate('/login');
+                      return;
+                    }
+                    if (isInWatchlist(item.id)) {
+                      removeFromWatchlist(item.id);
+                    } else {
+                      addToWatchlist(item.id);
+                    }
+                  }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: isInWatchlist(item.id) ? '#ffb300' : '#888' }}
+                  title={isInWatchlist(item.id) ? "Remove from Watchlist" : "Add to Watchlist"}
+                >
+                  {isInWatchlist(item.id) ? '★' : '☆'}
+                </button>
+              </div>
             </Link>
           ))
         }

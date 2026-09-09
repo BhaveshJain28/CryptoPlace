@@ -76,27 +76,56 @@ cryptoplace/
    cd cryptoplace
    ```
 
-2. **Install dependencies**
+2. **Install frontend dependencies**
 
    ```bash
    npm install
    ```
 
-3. **Set up environment variables**
+3. **Install backend dependencies**
 
-   Create a `.env` file in the project root:
+   ```bash
+   cd backend
+   npm install
+   cd ..
+   ```
 
+4. **Set up environment variables**
+
+   You will need two `.env` files: one for the frontend and one for the backend.
+   Reference the included `.env.example` files to set up your keys.
+
+   **Frontend** (`.env` in the root folder):
    ```env
+   VITE_API_URL=http://localhost:5000/api
    VITE_CG_API_KEY=your_coingecko_api_key_here
    ```
 
-4. **Start the development server**
+   **Backend** (`backend/.env`):
+   ```env
+   PORT=5000
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/cryptoplace?retryWrites=true&w=majority
+   JWT_SECRET=your_super_secret_jwt_key_here
+   COINGECKO_BASE_URL=https://api.coingecko.com/api/v3
+   CG_API_KEY=your_coingecko_api_key_here
+   ```
 
+5. **Start the development servers**
+
+   Open two terminal windows or use concurrently:
+
+   **Terminal 1 (Backend):**
+   ```bash
+   cd backend
+   npm run start
+   ```
+
+   **Terminal 2 (Frontend):**
    ```bash
    npm run dev
    ```
 
-5. **Open in browser**
+6. **Open in browser**
 
    Navigate to `http://localhost:5173`
 
@@ -141,9 +170,20 @@ cryptoplace/
 
 ## 🔑 Environment Variables
 
+### Frontend Variables (`/.env`)
 | Variable | Description |
 |---|---|
+| `VITE_API_URL` | URL of your backend API (default: `http://localhost:5000/api`) |
 | `VITE_CG_API_KEY` | Your CoinGecko Demo API key |
+
+### Backend Variables (`/backend/.env`)
+| Variable | Description |
+|---|---|
+| `PORT` | Backend server port (default: `5000`) |
+| `MONGO_URI` | MongoDB connection string for user and watchlist data |
+| `JWT_SECRET` | Secret key for signing JWT tokens |
+| `COINGECKO_BASE_URL` | Base URL for CoinGecko API (`https://api.coingecko.com/api/v3`) |
+| `CG_API_KEY` | Your CoinGecko Demo API key |
 
 > Get a free API key at [coingecko.com/en/api](https://www.coingecko.com/en/api)
 
