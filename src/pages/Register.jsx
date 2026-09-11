@@ -32,17 +32,22 @@ function Register() {
     return (
         <div className="auth-page">
             <div className="auth-terminal">
-                <div className="auth-brand">
-                    <div className="auth-logo-box">
-                        <img src={logo} alt="CryptoPlace" style={{width:'32px', height:'32px', filter:'brightness(0) invert(1)'}} />
+                {/* <div className="auth-top-bar">
+                    <div className="status-left">
+                        <div className="status-dot"></div>
+                        SYSTEM • ONLINE
                     </div>
-                    <h2>CryptoPlace</h2>
+                    <div>TLS 1.3 | AES-256</div>
+                </div> */}
+
+                <div className="auth-brand">
+                    <img src={logo} alt="Cryptoplace" />
                     <p>Crypto tracking, watchlists & portfolio simulation</p>
                 </div>
 
                 <div className="auth-tabs">
                     <Link to="/login" className="auth-tab">Sign In</Link>
-                    <div className="auth-tab active">Create Account</div>
+                    <button className="auth-tab active" type="button">Create Account</button>
                 </div>
 
                 {error && (
@@ -63,7 +68,7 @@ function Register() {
                     </div>
                     <div className="auth-form-group">
                         <label>PASSWORD</label>
-                        <div className="input-wrap">
+                        <div className='input-wrap-auth'>
                             <input 
                                 type={showPassword ? 'text' : 'password'}
                                 placeholder="Min. 6 characters"
@@ -76,11 +81,24 @@ function Register() {
                                 type="button" 
                                 className="show-pw-btn"
                                 onClick={() => setShowPassword(!showPassword)}
+                                tabIndex="-1"
                             >
                                 {showPassword ? 'HIDE' : 'SHOW'}
                             </button>
                         </div>
                     </div>
+
+                    {/* <div className="remember-row">
+                        <input 
+                            type="checkbox" 
+                            id="rememberReg" 
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                        />
+                        <label htmlFor="rememberReg" style={{ textTransform: 'none', fontWeight: '500', color: '#cbd5e1', letterSpacing: 'normal', fontSize: '13px', cursor: 'pointer' }}>
+                            Remember device for 30 days
+                        </label>
+                    </div> */}
 
                     <button type="submit" className="auth-btn-primary" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Create Account →'}

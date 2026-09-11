@@ -13,7 +13,7 @@ function Footer() {
         <div className="footer-brand">
           <Link to="/" className="footer-logo-link">
             <img src={logo} alt="CryptoPlace" className="footer-logo" />
-            <span className="footer-brand-name">CryptoPlace</span>
+            {/* <span className="footer-brand-name">CryptoPlace</span> */}
           </Link>
           <p className="footer-tagline">
             Real-time crypto market data, personal watchlists, and portfolio simulation — all in one place.

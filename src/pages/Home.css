@@ -288,6 +288,13 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.global-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-primary);
 }
 
 .card-top, .card-mid, .card-bot {
@@ -426,6 +433,13 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-primary);
 }
 
 .feature-icon-wrapper {
@@ -489,5 +503,26 @@
     }
     .hero-text-block h1 {
         font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home {
+        padding: 0 12px;
+    }
+    .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+    .action-btn-outline, .action-btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+    .hero-text-block h1 {
+        font-size: 20px;
+    }
+    .search-inline-btn {
+        padding: 6px 12px;
     }
 }

@@ -27,7 +27,7 @@
 }
 
 .footer-logo {
-    width: 26px;
+    /* width: 26px; */
     height: 26px;
     filter: brightness(0) invert(1);
     flex-shrink: 0;

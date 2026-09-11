@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, useCallback } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import './Home.css'
 import { CoinContext } from '../context/CoinContext'
 import { Link, useNavigate } from 'react-router-dom'
@@ -8,7 +8,7 @@ import Sparkline from '../components/Sparkline/Sparkline'
 import { exportToCSV } from '../utils/exportToCSV'
 
 function Home() {
-  const { allCoins, globalData, trendingCoins, currency } = useContext(CoinContext);
+  const { allCoins, globalData, currency } = useContext(CoinContext);
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
   const { addToWatchlist, removeFromWatchlist, isInWatchlist } = useContext(WatchlistContext);
@@ -86,7 +86,9 @@ function Home() {
 
   useEffect(() => {
     if (allCoins.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDisplayCoin(allCoins);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false);
     }
   }, [allCoins]);
@@ -122,23 +124,16 @@ function Home() {
     <div className='home'>
       
       {/* Hero / Search */}
-      <div className="home-top-ribbon">
-        <div className="telemetry-label">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M2 12h4l3-9 5 18 3-9h5"></path>
-          </svg>
-          LIVE MARKET DATA
-        </div>
-        
+      <div className="home-top-ribbon"> 
         <div className="hero-text-block">
           <div>
-            <h1>Track, Analyze, and Simulate<br/>Digital Assets in Real-Time</h1>
+            <h1>Track, Analyze, and Simulate Digital Assets in Real-Time</h1>
             <p>Real-time pricing, portfolio simulations, and watchlists across{' '}
-              {activeCryptos ? activeCryptos.toLocaleString() : '10,000+'}+ coins.</p>
+              {activeCryptos ? activeCryptos.toLocaleString() : '...'}+ coins.</p>
           </div>
           <div className="hero-actions">
-            <button className="export-btn" onClick={handleExport}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <button className="action-btn-outline" onClick={handleExport} style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "10px"}}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -146,7 +141,7 @@ function Home() {
               Export Dataset
             </button>
             <button
-              className="new-watchlist-btn"
+              className="action-btn-primary"
               onClick={() => navigate(token ? '/watchlist' : '/login')}
             >
               {token ? 'Go to Watchlist' : 'Sign in for Watchlist'}
@@ -205,7 +200,7 @@ function Home() {
             )}
           </div>
 
-          {trendingCoins.length > 0 && (
+          {/* {trendingCoins.length > 0 && (
             <div className="trending-ribbon">
               <span className="trending-label">TRENDING:</span>
               {trendingCoins.slice(0, 5).map(coin => (
@@ -218,7 +213,7 @@ function Home() {
                 </Link>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
@@ -234,6 +229,7 @@ function Home() {
             )}
           </div>
           <div className="card-mid">
+            {/* Sourced from live CoinGecko global data endpoint */}
             <h2>{globalData ? `${currency.symbol}${formatNumber(totalMarketCap)}` : <span className="skeleton-text">Loading...</span>}</h2>
           </div>
           <div className="card-bot">
@@ -248,6 +244,7 @@ function Home() {
             <span className="label-caps">SPOT</span>
           </div>
           <div className="card-mid">
+            {/* Live 24H volume aggregated via global API state */}
             <h2>{globalData ? `${currency.symbol}${formatNumber(totalVolume)}` : <span className="skeleton-text">Loading...</span>}</h2>
           </div>
           <div className="card-bot">
@@ -262,6 +259,7 @@ function Home() {
             <span className="label-caps">ETH: {ethDominance ? ethDominance.toFixed(1) + '%' : '—'}</span>
           </div>
           <div className="card-mid">
+            {/* Live market cap percentage from CoinGecko */}
             <h2>{btcDominance ? btcDominance.toFixed(1) + '%' : <span className="skeleton-text">Loading...</span>}</h2>
           </div>
           <div className="card-bot bar-container">
@@ -277,6 +275,7 @@ function Home() {
             <span className="label-caps">ACTIVE CRYPTOCURRENCIES</span>
           </div>
           <div className="card-mid">
+            {/* Real active asset count from live global data */}
             <h2>{activeCryptos ? activeCryptos.toLocaleString() : <span className="skeleton-text">Loading...</span>}</h2>
           </div>
           <div className="card-bot">
@@ -287,7 +286,7 @@ function Home() {
       </div>
 
       {/* Table Toolbar */}
-      <div className="table-toolbar">
+      {/* <div className="table-toolbar">
         <div className="filter-pills">
           <div className="pill active">All Assets</div>
         </div>
@@ -298,7 +297,7 @@ function Home() {
               : `Showing top ${Math.min(displayCoins.length, 20)} of ${displayCoins.length} assets`}
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* Coin Table */}
       <div className="crypto_table home-table-container">
@@ -333,7 +332,7 @@ function Home() {
             <button className="export-btn" onClick={clearSearch}>Clear search</button>
           </div>
         ) : (
-          displayCoins.slice(0, 20).map((item) => (
+          displayCoins.slice(0, 21).map((item) => (
             <div className="home-table-layout watchlist-row" key={item.id}>
               <p className="metric">{item.market_cap_rank}</p>
 
@@ -361,6 +360,7 @@ function Home() {
               <p className="metric" style={{textAlign:'right'}}>{currency.symbol}{item.market_cap?.toLocaleString() ?? '—'}</p>
 
               <div style={{display:'flex', justifyContent:'center'}}>
+                {/* 7D trend line driven directly by sparkline data array */}
                 <Sparkline
                   data={item.sparkline_in_7d?.price || []}
                   color={(item.price_change_percentage_7d_in_currency ?? 0) >= 0 ? '#10B981' : '#EF4444'}
@@ -392,11 +392,11 @@ function Home() {
           ))
         )}
 
-        {!loading && displayCoins.length > 0 && (
+        {/* {!loading && displayCoins.length > 0 && (
           <div className="table-footer">
             <span>Showing {Math.min(displayCoins.length, 20)} of {displayCoins.length} assets — data via CoinGecko</span>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   )

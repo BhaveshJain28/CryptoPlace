@@ -42,7 +42,7 @@ function Navbar() {
     <nav className='navbar'>
       <Link to="/" className="nav-logo" aria-label="CryptoPlace Home">
         <img src={logo} alt="CryptoPlace" />
-        <span className="nav-brand-name">CryptoPlace</span>
+        {/* <span className="nav-brand-name">CryptoPlace</span> */}
       </Link>
 
       {menuOpen && <div className="nav-overlay" onClick={() => setMenuOpen(false)}></div>}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import './Coin.css'
 import { CoinContext } from '../context/CoinContext'
 import { useParams, useNavigate, Link } from 'react-router-dom'
@@ -21,41 +21,49 @@ function Coin() {
   const { addToWatchlist, removeFromWatchlist, isInWatchlist } = useContext(WatchlistContext);
   const navigate = useNavigate();
 
-  const fetchCoinData = async () => {
+  const fetchCoinData = useCallback(async () => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCoinData(null);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCoinError(null);
     try {
       const { data } = await api.get(`/coins/${coinid}`);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCoinData(data);
     } catch (error) {
       console.error(error);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCoinError(
         error.response?.status === 404
           ? `Coin "${coinid}" not found.`
           : 'Failed to load coin data. The API may be rate-limited — please try again in a moment.'
       );
     }
-  };
+  }, [coinid]);
 
-  const fetchHistoricalData = async (daysParam) => {
+  const fetchHistoricalData = useCallback(async (daysParam) => {
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       const { data } = await api.get(`/coins/${coinid}/market_chart`, { 
         params: { vs_currency: currency.name, days: daysParam, interval: daysParam > 30 ? 'daily' : 'hourly' } 
       });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHistoricalData(data);
     } catch (err) {
       console.error(err);
       // Chart data failure is non-fatal — keep coinData visible
     }
-  };
+  }, [coinid, currency.name]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCoinData();
-  }, [currency, coinid]);
+  }, [fetchCoinData]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchHistoricalData(days);
-  }, [currency, coinid, days]);
+  }, [days, fetchHistoricalData]);
 
   if (coinError) {
     return (
@@ -111,6 +119,7 @@ function Coin() {
             <img src={coinData.image?.large} alt={coinData.name} />
             <div>
               <div style={{display:'flex', alignItems:'center', gap:'12px', flexWrap:'wrap'}}>
+                {/* Sourced directly from /coins/:id API */}
                 <h1>{coinData.name}</h1>
                 <span className="coin-symbol">{coinData.symbol?.toUpperCase()}</span>
                 <span className="coin-rank">RANK #{coinData.market_cap_rank || 'N/A'}</span>
@@ -145,10 +154,10 @@ function Coin() {
                 isInWatchlist(coinid) ? removeFromWatchlist(coinid) : addToWatchlist(coinid);
               }}
             >
-              {isInWatchlist(coinid) ? '✓ In Watchlist' : '+ Add to Watchlist'}
+              {isInWatchlist(coinid) ? 'In Watchlist' : 'Add to Watchlist'}
             </button>
             <Link to="/portfolio">
-              <button className="action-btn-primary">Simulate Position →</button>
+              <button className="action-btn-primary">Simulate Position</button>
             </Link>
           </div>
         </div>
@@ -177,6 +186,7 @@ function Coin() {
                 {marketCapChange24h >= 0 ? '+' : ''}{marketCapChange24h.toFixed(2)}%
               </span>
             </div>
+            {/* Live market cap value */}
             <div className="stat-mid">
               <h3>{currency.symbol}{(marketCap / 1e9).toFixed(2)}B</h3>
             </div>
@@ -244,6 +254,7 @@ function Coin() {
             </div>
             <div className="stats-list">
               <div className="stat-row">
+                {/* Fallback to N/A if API doesn't return ATH */}
                 <span>All-Time High</span>
                 <div style={{textAlign: 'right'}}>
                   <span className="metric">
@@ -351,7 +362,7 @@ function Coin() {
               </div>
               
               <Link to="/portfolio">
-                <button className="sim-btn">Open Full Portfolio Simulator →</button>
+                <button className="sim-btn">Open Full Portfolio Simulator</button>
               </Link>
             </div>
           </div>

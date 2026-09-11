@@ -28,16 +28,21 @@ function Login() {
     return (
         <div className="auth-page">
             <div className="auth-terminal">
-                <div className="auth-brand">
-                    <div className="auth-logo-box">
-                        <img src={logo} alt="CryptoPlace" style={{width:'32px', height:'32px', filter:'brightness(0) invert(1)'}} />
+                {/* <div className="auth-top-bar">
+                    <div className="status-left">
+                        <div className="status-dot"></div>
+                        SYSTEM • ONLINE
                     </div>
-                    <h2>CryptoPlace</h2>
+                    <div>TLS 1.3 | AES-256</div>
+                </div> */}
+
+                <div className="auth-brand">
+                    <img src={logo} alt="Cryptoplace" />
                     <p>Crypto tracking, watchlists & portfolio simulation</p>
                 </div>
 
                 <div className="auth-tabs">
-                    <div className="auth-tab active">Sign In</div>
+                    <button className="auth-tab active" type="button">Sign In</button>
                     <Link to="/register" className="auth-tab">Create Account</Link>
                 </div>
 
@@ -59,7 +64,7 @@ function Login() {
                     </div>
                     <div className="auth-form-group">
                         <label>PASSWORD</label>
-                        <div className="input-wrap">
+                        <div className="input-wrap-auth">
                             <input 
                                 type={showPassword ? 'text' : 'password'}
                                 placeholder="••••••••"
@@ -72,11 +77,24 @@ function Login() {
                                 type="button" 
                                 className="show-pw-btn" 
                                 onClick={() => setShowPassword(!showPassword)}
+                                tabIndex="-1"
                             >
                                 {showPassword ? 'HIDE' : 'SHOW'}
                             </button>
                         </div>
                     </div>
+
+                    {/* <div className="remember-row">
+                        <input 
+                            type="checkbox" 
+                            id="remember" 
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                        />
+                        <label htmlFor="remember" style={{ textTransform: 'none', fontWeight: '500', color: '#cbd5e1', letterSpacing: 'normal', fontSize: '13px', cursor: 'pointer' }}>
+                            Remember device for 30 days
+                        </label>
+                    </div> */}
 
                     <button type="submit" className="auth-btn-primary" disabled={loading}>
                         {loading ? 'Signing In...' : 'Sign In →'}

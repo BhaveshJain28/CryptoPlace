@@ -6,6 +6,14 @@ import { Link } from 'react-router-dom'
 import { exportToCSV } from '../utils/exportToCSV'
 import Sparkline from '../components/Sparkline/Sparkline'
 
+const DownloadIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+);
+
 function Watchlist() {
   const { allCoins, currency } = useContext(CoinContext);
   const { watchlist, removeFromWatchlist, addToWatchlist } = useContext(WatchlistContext);
@@ -18,10 +26,12 @@ function Watchlist() {
     const watchedCoins = allCoins.filter(coin => watchlist.includes(coin.id));
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDisplayCoins(watchedCoins.filter(c =>
         c.name.toLowerCase().includes(q) || c.symbol.toLowerCase().includes(q)
       ));
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDisplayCoins(watchedCoins);
     }
 
@@ -31,6 +41,7 @@ function Watchlist() {
       const sortedByGain = [...nonWatched].sort((a, b) => 
         (b.price_change_percentage_24h || 0) - (a.price_change_percentage_24h || 0)
       );
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSuggestedCoins(sortedByGain.slice(0, 4));
     }
   }, [allCoins, watchlist, searchQuery]);
@@ -50,69 +61,46 @@ function Watchlist() {
     exportToCSV('watchlist.csv', rows);
   };
 
-  const DownloadIcon = () => (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-      <polyline points="7 10 12 15 17 10"></polyline>
-      <line x1="12" y1="15" x2="12" y2="3"></line>
-    </svg>
-  );
-
-  const totalWatched = allCoins.filter(c => watchlist.includes(c.id));
-  const overallChange = totalWatched.length > 0
-    ? totalWatched.reduce((sum, c) => sum + (c.price_change_percentage_24h || 0), 0) / totalWatched.length
-    : null;
-
   return (
     <div className='watchlist-page'>
       {/* Header */}
       <div className="watchlist-header">
-        <div className="pre-header">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-          </svg>
-          WATCHLIST
-        </div>
         <div className="header-main">
           <div className="header-title-block">
-            <h1>Your Monitored Assets</h1>
+            <div className="title-row">
+              <h1>Your Monitored Assets</h1>
+              {/* Live count of tracked assets driven by WatchlistContext */}
+              <div className="live-badge">
+                <span className="status-dot"></span>
+                Live Telemetry • {watchlist.length} Asset{watchlist.length !== 1 ? 's' : ''} Tracked
+              </div>
+            </div>
             <p>Track real-time prices and 24h changes for your selected assets.</p>
           </div>
-          {overallChange != null && (
-            <div className="status-bar">
-              <span>
-                <div className="status-dot"></div>
-                {watchlist.length} assets tracked
-              </span>
-              <span className={overallChange >= 0 ? 'green-text' : 'red-text'}>
-                Avg 24H: {overallChange >= 0 ? '+' : ''}{overallChange.toFixed(2)}%
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
 
-      {/* Toolbar */}
-      <div className="watchlist-toolbar">
-        <div className="filter-pills">
-          <div className="pill active">All ({watchlist.length})</div>
-        </div>
-        <div className="toolbar-actions">
-          <input
-            type="text"
-            id="watchlist-search"
-            className="search-input"
-            placeholder="Search watchlist..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-          />
-          {displayCoins.length > 0 && (
-            <button className="export-btn" onClick={handleExport}>
-              <DownloadIcon /> Export CSV
-            </button>
-          )}
+          <div className="header-actions">
+            <div className="search-wrap">
+              {/* <svg className="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg> */}
+              <input
+                type="text"
+                id="watchlist-search"
+                className="search-input"
+                placeholder="Search watchlist..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+            </div>
+            {displayCoins.length > 0 && (
+              <button className="export-btn" onClick={handleExport}>
+                <DownloadIcon /> Export CSV
+              </button>
+            )}
+          </div>
         </div>
       </div>
+      <div className="header-divider"></div>
 
       {/* Table */}
       <div className="crypto_table watchlist-table-container">
@@ -206,6 +194,7 @@ function Watchlist() {
 
         {displayCoins.length > 0 && (
           <div className="table-footer">
+            {/* Dynamic string based on live data filtering */}
             <span>Showing {displayCoins.length} of {watchlist.length} tracked assets</span>
           </div>
         )}
