@@ -1,67 +1,251 @@
 import React, { useContext, useEffect, useState } from 'react'
-import '../pages/Home.css' // Reuse Home.css for similar layout
+import './Watchlist.css'
 import { CoinContext } from '../context/CoinContext'
 import { WatchlistContext } from '../context/WatchlistContext'
 import { Link } from 'react-router-dom'
+import { exportToCSV } from '../utils/exportToCSV'
+import Sparkline from '../components/Sparkline/Sparkline'
+
+const DownloadIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+);
 
 function Watchlist() {
   const { allCoins, currency } = useContext(CoinContext);
-  const { watchlist, removeFromWatchlist } = useContext(WatchlistContext);
+  const { watchlist, removeFromWatchlist, addToWatchlist } = useContext(WatchlistContext);
   const [displayCoins, setDisplayCoins] = useState([]);
+  const [suggestedCoins, setSuggestedCoins] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const filteredCoins = allCoins.filter(coin => watchlist.includes(coin.id));
-    setDisplayCoins(filteredCoins);
-  }, [allCoins, watchlist]);
+    // Current Watchlist — filter by search query
+    const watchedCoins = allCoins.filter(coin => watchlist.includes(coin.id));
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDisplayCoins(watchedCoins.filter(c =>
+        c.name.toLowerCase().includes(q) || c.symbol.toLowerCase().includes(q)
+      ));
+    } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDisplayCoins(watchedCoins);
+    }
+
+    // Suggested: top gainers not in watchlist
+    if (allCoins.length > 0) {
+      const nonWatched = allCoins.filter(coin => !watchlist.includes(coin.id));
+      const sortedByGain = [...nonWatched].sort((a, b) => 
+        (b.price_change_percentage_24h || 0) - (a.price_change_percentage_24h || 0)
+      );
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSuggestedCoins(sortedByGain.slice(0, 4));
+    }
+  }, [allCoins, watchlist, searchQuery]);
+
+  const handleExport = () => {
+    const headers = ['Asset', 'Ticker', 'Price', '24H Change %', 'Market Cap'];
+    const rows = [headers];
+    displayCoins.forEach(coin => {
+      rows.push([
+        coin.name,
+        coin.symbol.toUpperCase(),
+        coin.current_price,
+        coin.price_change_percentage_24h,
+        coin.market_cap
+      ]);
+    });
+    exportToCSV('watchlist.csv', rows);
+  };
 
   return (
-    <div className='home'>
-      <div className="hero" style={{ padding: '40px 0', minHeight: 'auto' }}>
-        <h2>My Watchlist</h2>
-        <p>Keep track of your favorite cryptocurrencies.</p>
-      </div>
+    <div className='watchlist-page'>
+      {/* Header */}
+      <div className="watchlist-header">
+        <div className="header-main">
+          <div className="header-title-block">
+            <div className="title-row">
+              <h1>Your Monitored Assets</h1>
+              {/* Live count of tracked assets driven by WatchlistContext */}
+              <div className="live-badge">
+                <span className="status-dot"></span>
+                Live Telemetry • {watchlist.length} Asset{watchlist.length !== 1 ? 's' : ''} Tracked
+              </div>
+            </div>
+            <p>Track real-time prices and 24h changes for your selected assets.</p>
+          </div>
 
-      <div className="crypto_table">
-        <div className="table-layout" style={{ gridTemplateColumns: '0.5fr 2fr 1fr 1fr 1fr 0.5fr' }}>
-            <p>#</p>
-            <p>Coins</p>
-            <p>Price</p>
-            <p style={{textAlign:'center'}}>24H Change</p>
-            <p className='market-cap' style={{textAlign:'right'}}>Market Cap</p>
-            <p style={{textAlign:'center'}}>Watch</p>
+          <div className="header-actions">
+            <div className="search-wrap">
+              {/* <svg className="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg> */}
+              <input
+                type="text"
+                id="watchlist-search"
+                className="search-input"
+                placeholder="Search watchlist..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+            </div>
+            {displayCoins.length > 0 && (
+              <button className="export-btn" onClick={handleExport}>
+                <DownloadIcon /> Export CSV
+              </button>
+            )}
+          </div>
         </div>
-       {
-          displayCoins.length > 0 ? displayCoins.map((item, index)=>(
-            <div className="table-layout" key={index} style={{ gridTemplateColumns: '0.5fr 2fr 1fr 1fr 1fr 0.5fr', alignItems: 'center' }}>
-              <Link to={`/coin/${item.id}`} style={{ display: 'contents', color: 'inherit', textDecoration: 'none' }}>
-                <p>{item.market_cap_rank}</p>
-                <div>
-                  <img src={item.image} alt="" />
-                  <p>{item.name +" - " +item.symbol}</p>
+      </div>
+      <div className="header-divider"></div>
+
+      {/* Table */}
+      <div className="crypto_table watchlist-table-container">
+        <div className="watchlist-table-layout watchlist-header-row label-caps">
+          <p>ASSET</p>
+          <p style={{textAlign:'right'}}>PRICE</p>
+          <p style={{textAlign:'center'}}>24H CHANGE</p>
+          <p style={{textAlign:'center'}}>24H RANGE</p>
+          <p style={{textAlign:'center'}}>7D TREND</p>
+          <p style={{textAlign:'right'}}>MARKET CAP</p>
+          <p style={{textAlign:'right'}}>ACTIONS</p>
+        </div>
+        
+        {displayCoins.length > 0 ? displayCoins.map((item) => {
+          const low = item.low_24h || 0;
+          const high = item.high_24h || 0;
+          const current = item.current_price || 0;
+          const rangePercent = high > low ? ((current - low) / (high - low)) * 100 : 50;
+
+          return (
+            <div className="watchlist-table-layout watchlist-row" key={item.id}>
+              {/* ASSET — entire cell navigates to coin */}
+              <Link to={`/coin/${item.id}`} className="asset-col watchlist-asset-link">
+                <img src={item.image} alt={item.name} />
+                <div className="asset-name">
+                  <p>{item.name}</p>
+                  <p className="asset-badge">{item.symbol.toUpperCase()}</p>
                 </div>
-                <p>{currency.symbol}{item.current_price.toLocaleString()}</p>
-                <p className={item.price_change_percentage_24h > 0 ? "green" : "red"} style={{textAlign:'center'}}>
-                  {Math.floor(item.price_change_percentage_24h*100)/100}%
-                </p>
-                <p className='market-cap' style={{textAlign:'right'}}>
-                  {currency.symbol}{item.market_cap.toLocaleString()}
-                </p>
               </Link>
-              <div style={{ textAlign: 'center' }}>
-                <button 
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeFromWatchlist(item.id); }}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#ffb300' }}
-                  title="Remove from Watchlist"
+
+              <p className="metric" style={{textAlign:'right'}}>
+                {currency.symbol}{current.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 6})}
+              </p>
+
+              <div style={{display:'flex', justifyContent:'center'}}>
+                <span className={`status-tag ${(item.price_change_percentage_24h || 0) >= 0 ? 'green' : 'red'}`}>
+                  {(item.price_change_percentage_24h || 0) >= 0 ? '↗ +' : '↘ '}
+                  {Math.abs(item.price_change_percentage_24h || 0).toFixed(2)}%
+                </span>
+              </div>
+
+              <div className="range-bar-container">
+                <div className="range-labels metric">
+                  <span>{currency.symbol}{low >= 1000 ? (low / 1000).toFixed(1) + 'k' : low.toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
+                  <span>{currency.symbol}{high >= 1000 ? (high / 1000).toFixed(1) + 'k' : high.toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
+                </div>
+                <div className="range-bar">
+                  <div className="range-fill" style={{width: `${Math.min(Math.max(rangePercent, 0), 100)}%`}}></div>
+                </div>
+              </div>
+
+              <div style={{display:'flex', justifyContent:'center'}}>
+                <Sparkline
+                  data={item.sparkline_in_7d?.price || []}
+                  color={(item.price_change_percentage_7d_in_currency || 0) >= 0 ? '#10B981' : '#EF4444'}
+                  width={80}
+                  height={28}
+                />
+              </div>
+
+              <p className="metric" style={{textAlign:'right'}}>
+                {currency.symbol}{item.market_cap >= 1e9
+                  ? (item.market_cap / 1e9).toFixed(1) + 'B'
+                  : item.market_cap >= 1e6
+                    ? (item.market_cap / 1e6).toFixed(1) + 'M'
+                    : item.market_cap.toLocaleString()}
+              </p>
+
+              <div className="row-actions">
+                <Link to={`/coin/${item.id}`}>
+                  <button className="export-btn" style={{padding:'4px 8px', fontSize:'11px'}}>Details</button>
+                </Link>
+                <button
+                  onClick={() => removeFromWatchlist(item.id)}
+                  className="export-btn"
+                  style={{padding:'4px 8px', fontSize:'11px', color:'var(--drawdown-crimson)'}}
+                  title="Remove from watchlist"
                 >
-                  ★
+                  Remove
                 </button>
               </div>
             </div>
-          )) : (
-            <p style={{ textAlign: 'center', padding: '20px' }}>Your watchlist is empty.</p>
-          )
-        }
+          );
+        }) : (
+          <div className="watchlist-empty">
+            {watchlist.length === 0
+              ? 'Your watchlist is empty. Add coins from the Markets page.'
+              : `No results for "${searchQuery}"`}
+          </div>
+        )}
+
+        {displayCoins.length > 0 && (
+          <div className="table-footer">
+            {/* Dynamic string based on live data filtering */}
+            <span>Showing {displayCoins.length} of {watchlist.length} tracked assets</span>
+          </div>
+        )}
       </div>
+
+      {/* Suggested Assets */}
+      {suggestedCoins.length > 0 && (
+        <div className="suggested-section">
+          <div className="suggested-header">
+            <div>
+              <h3>Top Gainers — Add to Watchlist</h3>
+              <p>Highest 24h gains from assets not currently in your watchlist.</p>
+            </div>
+          </div>
+          
+          <div className="suggested-grid">
+            {suggestedCoins.map((coin) => (
+              <div className="suggested-card" key={coin.id}>
+                <div className="suggested-card-top">
+                  <Link to={`/coin/${coin.id}`} className="asset-info" style={{textDecoration:'none'}}>
+                    <img src={coin.image} alt={coin.name} />
+                    <div>
+                      <p style={{fontWeight: 500, color: 'var(--text-primary)', marginBottom: '2px'}}>{coin.name}</p>
+                      <p style={{fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase'}}>
+                        {coin.symbol} · {currency.symbol}{coin.current_price.toLocaleString(undefined, {maximumFractionDigits: 6})}
+                      </p>
+                    </div>
+                  </Link>
+                  <span className={`status-tag ${(coin.price_change_percentage_24h || 0) >= 0 ? 'green' : 'red'}`}>
+                    {(coin.price_change_percentage_24h || 0) >= 0 ? '+' : ''}{(coin.price_change_percentage_24h || 0).toFixed(2)}%
+                  </span>
+                </div>
+                <div className="suggested-card-bottom">
+                  <Sparkline
+                    data={coin.sparkline_in_7d?.price || []}
+                    color={(coin.price_change_percentage_7d_in_currency || 0) >= 0 ? '#10B981' : '#EF4444'}
+                    width={80}
+                    height={24}
+                  />
+                  <button 
+                    className="add-watch-btn"
+                    onClick={() => addToWatchlist(coin.id)}
+                  >
+                    + Add to Watchlist
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

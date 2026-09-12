@@ -1,0 +1,15 @@
+.sparkline {
+    overflow: visible;
+}
+
+.sparkline polyline {
+    animation: draw 1.5s ease-out forwards;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+}
+
+@keyframes draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
