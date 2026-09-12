@@ -39,6 +39,28 @@ const getMarketChart = async (req, res) => {
     }
 }
 
+const getGlobal = async (req, res) => {
+    try {
+        const { data } = await coingeckoApi.get(`/global`);
+        res.status(200).json(data.data);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch global data' });
+    }
+}
+
+const getTrending = async (req, res) => {
+    try {
+        const { data } = await coingeckoApi.get(`/search/trending`);
+        res.status(200).json(data.coins);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch trending data' });
+    }
+}
+
 module.exports = {
-    getMarkets, getCoinById, getMarketChart
+    getMarkets, getCoinById, getMarketChart, getGlobal, getTrending
 }

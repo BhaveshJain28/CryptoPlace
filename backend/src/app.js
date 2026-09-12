@@ -11,6 +11,12 @@ app.get('/', (req, res) => {
 });
 
 const routes = require('./routes/routes');
+const authRoutes = require('./routes/auth');
+const watchlistRoutes = require('./routes/watchlist');
+const portfolioRoutes = require('./routes/portfolio');
 app.use('/api', routes);
+app.use('/api/auth', authRoutes);
+app.use('/api/watchlist', watchlistRoutes);
+app.use('/api/portfolio', portfolioRoutes);
 
 module.exports = app;
