@@ -101,7 +101,7 @@ function Register() {
                     </div> */}
 
                     <button type="submit" className="auth-btn-primary" disabled={loading}>
-                        {loading ? 'Creating Account...' : 'Create Account →'}
+                        {loading ? 'Creating Account...' : 'Create Account'}
                     </button>
                 </form>
 

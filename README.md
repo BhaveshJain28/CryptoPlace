@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="./public/favicon.svg" alt="CryptoPlace Logo" width="120" />
   <h1>🪙 CryptoPlace</h1>
   <p><strong>A Next-Generation Cryptocurrency Portfolio & Market Tracker</strong></p>
   
