@@ -95,6 +95,8 @@ function Home() {
 
   const formatNumber = (num) => {
     if (!num && num !== 0) return '—';
+    if (num >= 1e18) return (num / 1e18).toFixed(2) + 'E';
+    if (num >= 1e15) return (num / 1e15).toFixed(2) + 'P';
     if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
     if (num >= 1e9)  return (num / 1e9).toFixed(2) + 'B';
     if (num >= 1e6)  return (num / 1e6).toFixed(2) + 'M';
@@ -356,8 +358,8 @@ function Home() {
               <p className={`metric ${(item.price_change_percentage_7d_in_currency ?? 0) >= 0 ? 'green' : 'red'}`} style={{textAlign:'right'}}>
                 {(item.price_change_percentage_7d_in_currency ?? 0) >= 0 ? '+' : ''}{(item.price_change_percentage_7d_in_currency ?? 0).toFixed(2)}%
               </p>
-              <p className="metric" style={{textAlign:'right'}}>{currency.symbol}{item.total_volume?.toLocaleString() ?? '—'}</p>
-              <p className="metric" style={{textAlign:'right'}}>{currency.symbol}{item.market_cap?.toLocaleString() ?? '—'}</p>
+              <p className="metric" style={{textAlign:'right'}}>{currency.symbol}{item.total_volume != null ? formatNumber(item.total_volume) : '—'}</p>
+              <p className="metric" style={{textAlign:'right'}}>{currency.symbol}{item.market_cap != null ? formatNumber(item.market_cap) : '—'}</p>
 
               <div style={{display:'flex', justifyContent:'center'}}>
                 {/* 7D trend line driven directly by sparkline data array */}

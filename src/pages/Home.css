@@ -407,6 +407,13 @@
     transition: background 0.1s ease;
 }
 
+.home-table-layout > p,
+.home-table-layout > .metric {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .pagination-pills {
     display: flex;
     gap: 4px;
