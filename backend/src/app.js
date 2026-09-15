@@ -7,7 +7,7 @@ app.use(cors());
 app.use(logger);
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('CryptoPlace Backend is running!');
 });
 
 const routes = require('./routes/routes');
